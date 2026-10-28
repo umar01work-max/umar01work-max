@@ -1,1 +1,27 @@
-<p align="center"> <img src="https://github-readme-stats.vercel.app/api?username=umar01work-max&show_icons=true&theme=dark&hide_border=false&count_private=true" alt="GitHub Stats" /> <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=umar01work-max&layout=compact&theme=dark" alt="Top Languages" /> </p> <p align="center"> <img src="https://github-readme-streak-stats.herokuapp.com/?user=umar01work-max&theme=dark" alt="GitHub Streak" /> </p>
+name: Generate Snake
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/github-snake.svg
+            dist/github-snake-dark.svg?palette=github-dark
+
+      - uses: crazy-max/ghaction-github-pages@v3.1.0
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
